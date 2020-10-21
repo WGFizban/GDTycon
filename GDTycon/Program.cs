@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using GDTycon.Game.Engine;
 
 namespace GDTycon
@@ -15,10 +16,34 @@ namespace GDTycon
             Menu hireMenu = new Menu("Zatrudnij pracownika", "Zwolnij pracownika", "Zainwestuj w reklamy by szukać pracowników (300.00)", "Wróć do menu");
             Menu projMenu = new Menu("Wybierz projekt", "Wróć do menu");
 */
-            DateTime startDate = DateTime.Parse("2020, 1, 29");
-            Console.WriteLine(startDate + "Czas obecny \n i czas po 50 dniach ");
+            DateTime startDate = DateTime.Parse("2020, 1, 1");
+            Console.WriteLine(startDate + "Czas obecny \n i czas po 20 dniach ");
             startDate=startDate.AddDays(20);
-            Console.WriteLine(startDate);
+            
+            Console.WriteLine(startDate.ToString("D"));
+
+            Dictionary<string, string> test = new Dictionary<string, string>();
+            test.Add("coś1", "coś1");
+            test.Add("coś2,", "coś2");
+            Console.WriteLine("słownik przed zmianą \n");
+            foreach (var item in test)
+            {
+                Console.WriteLine("klucz {0} i wartość {1}",item.Key,item.Value);
+            }
+            Console.WriteLine("i po zmianie \n");
+            // zmiana elementu w słowniku test["coś1"] = "nowy coś";
+
+            foreach (var item in test)
+            {
+                Console.WriteLine("klucz {0} i wartość {1}", item.Key, item.Value);
+            }
+
+
+
+
+
+            Console.ReadKey();
+
         }
     }
 }
