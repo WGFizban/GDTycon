@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace GDTycon.Game.Engine
 {
-    class Menu
+    public class Menu
     {
         private string[] menuOptions;
 
-        public Menu(string[] menuOptions)
+        public Menu(params string[] menuOptions)
         {
             this.menuOptions = menuOptions;
         }
@@ -22,15 +20,46 @@ namespace GDTycon.Game.Engine
             }
         }
 
+        public int SelectOptions()
+        {
+            ShowOnly();
+            Console.Write("Którą opcję wybierasz? Opcja: ");
 
+            int choice = CheckChoose();
+            while (choice >= menuOptions.Length || choice < 0)
+            {
+                Console.Write("Nie ma takiej opcji. Podaj poprawną opcje. Opcja: ");
+                choice = CheckChoose();
+            }
+            return choice;
+        }
 
+        //możliwość tworzenia szybkiego menu
+        public int SelectOptions(int optionsLimit, String message)
+        {
+            Console.WriteLine("\n" + message + " ");
 
+            int choice = CheckChoose();
+            while (choice >= optionsLimit || choice < 0)
+            {
+                Console.WriteLine("Niedozwolony numer. Podaj poprawny: ");
+                choice = CheckChoose();
+            }
+            return choice;
+        }
 
-
-
-
-
-
-
+        //zapobieganie wprowadzeniu znaków innych niż potrzebna liczba
+        private static int CheckChoose()
+        {
+            try
+            {
+                return Convert.ToInt32(Console.ReadLine());
+            }
+            catch (Exception)
+            {
+                Console.Write("Wykryto niedozwolone znaki. Musisz podać liczbę! Opcja: ");
+                return CheckChoose();
+            }
+        }
     }
 }
