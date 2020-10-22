@@ -9,8 +9,7 @@ namespace GDTycon.Game.Engine
         public string projectName;
 
         public GameEnum.ProjectComplexity complexity;
-        private static string[] technology = { "front-end", "backend", "baza danych", "mobile", "wordpress", "prestashop" };
-
+        
         //słowniik z c# zamiast mapy z Java
         // zmiana elementu w słowniku -> słownik["klucz"] = "nowa wartość";
         public Dictionary<string, int> daysForTechnology = new Dictionary<string, int>();
@@ -39,9 +38,10 @@ namespace GDTycon.Game.Engine
             this.penalty = penalty;
             this.reward = reward;
             this.timeOfReward = timeOfReward;
-            for (int i = 0; i < technology.Length; i++)
+            //technologie są niezmienne i przechowywane razem z enumami w klasie GameEnum
+            for (int i = 0; i < GameEnum.technology.Length; i++)
             {
-                daysForTechnology.Add(technology[i], techDuration[i]);
+                daysForTechnology.Add(GameEnum.technology[i], techDuration[i]);
             }
         }
 

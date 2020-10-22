@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GDTycon.Game.Engine;
+using GDTycon.Game.NPC;
 
 namespace GDTycon
 {
@@ -38,6 +39,14 @@ namespace GDTycon
                 Console.WriteLine("klucz {0} i wartość {1}", item.Key, item.Value);
             }
 
+            Generator.NumberGenerator();
+            
+
+            for (int i = 0; i < 20; i++)
+            {
+            Console.WriteLine(Generator.getRandomClient() + "\n");
+            }
+            
 
 
 

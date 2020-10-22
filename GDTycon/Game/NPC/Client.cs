@@ -17,7 +17,7 @@ namespace GDTycon.Game.NPC
             this.character = character;
         }
 
-        private void AddProject(GameProject project)
+        public void AddProject(GameProject project)
         {
             if (project != null) project.SetOwner(this);
             this.projects.Add(project);
@@ -25,10 +25,7 @@ namespace GDTycon.Game.NPC
 
         public override string ToString()
         {
-            return "Klient {" +
-                "imię='" + firstName + '\'' +
-                ", nazwisko='" + lastName + '\'' +
-                '}';
+            return "Klient "+ firstName +" " + lastName /*+ " o charakterze " + character*/;
         }
     }
 }
