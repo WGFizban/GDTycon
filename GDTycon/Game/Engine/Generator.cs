@@ -41,7 +41,7 @@ namespace GDTycon.Game.NPC
         }
 
         //Ganerator projektów
-        public static GameProject getRandomGameProject(DateTime now)
+        public static GameProject GetRandomGameProject(DateTime now)
         {
             int randFirstSegmentName = rand.Next(0, PROJECT_FIRST_SEGMENT_NAME.Length);
             int randLastSegmentName = rand.Next(0, PROJECT_LAST_SEGMENT_NAME.Length);

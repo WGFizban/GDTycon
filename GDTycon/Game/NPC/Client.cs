@@ -8,7 +8,7 @@ namespace GDTycon.Game.NPC
         public string firstName;
         public string lastName;
         public GameEnum.ClientCharacter character;
-        public List<GameProject> projects;
+        public List<GameProject> clientProjects = new List<GameProject>();
 
         public Client(string firstName, string lastName, GameEnum.ClientCharacter character)
         {
@@ -19,8 +19,11 @@ namespace GDTycon.Game.NPC
 
         public void AddProject(GameProject project)
         {
-            if (project != null) project.SetOwner(this);
-            this.projects.Add(project);
+            if (project != null)
+            {
+                project.SetOwner(this);
+                clientProjects.Add(project);
+            }
         }
 
         public override string ToString()

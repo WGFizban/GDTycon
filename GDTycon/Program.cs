@@ -1,4 +1,5 @@
-﻿using GDTycon.Game.NPC;
+﻿using GDTycon.Game.Engine;
+using GDTycon.Game.NPC;
 using System;
 using System.Collections.Generic;
 
@@ -40,10 +41,11 @@ namespace GDTycon
 
             Generator.NumberGenerator();
 
-            for (int i = 0; i < 20; i++)
-            {
-                Console.WriteLine(Generator.getRandomClient() + "\n");
-            }
+            Client owner = Generator.GetRandomClient();
+            GameProject gameProject = Generator.GetRandomGameProject(DateTime.Now);
+            owner.AddProject(gameProject);
+
+            Console.WriteLine(owner + "\n" + gameProject);
 
             Console.ReadKey();
         }

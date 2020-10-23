@@ -12,7 +12,7 @@ namespace GDTycon.Game.NPC
 
         public override bool DoYourWorkForPlayer(Player player)
         {
-            if ((CountOfTesters(player) * 3) <= CountOfProgrammers(player) && player.myProjects.size() > 0)
+            if ((CountOfTesters(player) * 3) <= CountOfProgrammers(player) && player.myProjects.Count > 0)
             {
                 foreach (var project in player.myProjects)
                 {
