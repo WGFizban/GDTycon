@@ -4,7 +4,7 @@ namespace GDTycon.Game.Engine
 {
     public class Menu
     {
-        private string[] menuOptions;
+        private readonly string[] menuOptions;
 
         public Menu(params string[] menuOptions)
         {
@@ -35,7 +35,7 @@ namespace GDTycon.Game.Engine
         }
 
         //możliwość tworzenia szybkiego menu
-        public int SelectOptions(int optionsLimit, String message)
+        public int SelectOptions(int optionsLimit, string message)
         {
             Console.WriteLine("\n" + message + " ");
 

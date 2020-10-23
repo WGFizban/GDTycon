@@ -5,11 +5,16 @@
     /// </summary>
     public static class GameEnum
     {
-       
         /// <summary>
         /// stałe 6 rodzajów technologii w projektach
         /// </summary>
         public static string[] technology = { "front-end", "backend", "baza danych", "mobile", "wordpress", "prestashop" };
+
+        /// <summary>
+        /// minimalna ilośc dni by znaleźć nowy projekt
+        /// </summary>
+        public static readonly int MIN_SEARCHING_DAYS = 5;
+
         /// <summary>
         /// enum z poziomem trudności projektu
         /// </summary>

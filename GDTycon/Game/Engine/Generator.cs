@@ -40,66 +40,71 @@ namespace GDTycon.Game.NPC
             Console.WriteLine();
         }
 
-        /*
+        //Ganerator projektów
+        public static GameProject getRandomGameProject(DateTime now)
+        {
+            int randFirstSegmentName = rand.Next(0, PROJECT_FIRST_SEGMENT_NAME.Length);
+            int randLastSegmentName = rand.Next(0, PROJECT_LAST_SEGMENT_NAME.Length);
+            //int randProjectComplexity = rand.Next(0, PROJECT_COMPLEXITY.Length);
 
-       //Ganerator projektów
-       public static GameProject getRandomGameProject(LocalDate now) {
-           int randFirstSegmentName = ThreadLocalRandom.current().nextInt(0, PROJECT_FIRST_SEGMENT_NAME.length);
-           int randLastSegmentName = ThreadLocalRandom.current().nextInt(0, PROJECT_LAST_SEGMENT_NAME.length);
-           int randProjectComplexity = ThreadLocalRandom.current().nextInt(0, PROJECT_COMPLEXITY.length);
+            GameEnum.ProjectComplexity randProjectComplexity = new GameEnum.ProjectComplexity();
+            randProjectComplexity = (GameEnum.ProjectComplexity)rand.Next(0, PROJECT_COMPLEXITY.Length);
 
-           int minDay = 1, maxDay = 2, rowModyficator;
-           List<Integer> randTechTime = new ArrayList<>();
-           int[][] percentagesForTechnologyTime = {{50, 100, 50, 0, 40, 40}, {100, 100, 100, 40, 70, 100}, {100, 100, 100, 50, 100, 100},};
-           //{timeModyficatorTechnology,dayModyficatorDeadline} w 3 odmianach dla konkretcnych poziomów złożoności projektu}
-           int[][] tableOfIntModyficator = {{0, 16}, {2, 8}, {4, 4},};
-           // { penaltyModyficator, rewardModyficator }
-           Double[][] tableOfDoubleModyficator = {{50.00, 200.00}, {100.00, 400.00}, {150.00, 600.00},};
+            int minDay = 1, maxDay = 2;
+            List<int> randTechTime = new List<int>();
+            int[,] percentagesForTechnologyTime = { { 50, 100, 50, 0, 40, 40 }, { 100, 100, 100, 40, 70, 100 }, { 100, 100, 100, 50, 100, 100 }, };
+            //{timeModyficatorTechnology,dayModyficatorDeadline} w 3 odmianach dla konkretcnych poziomów złożoności projektu}
+            int[,] tableOfIntModyficator = { { 0, 16 }, { 2, 8 }, { 4, 4 }, };
+            // { penaltyModyficator, rewardModyficator }
+            double[,] tableOfDoubleModyficator = { { 50.00, 200.00 }, { 100.00, 400.00 }, { 150.00, 600.00 }, };
 
-           switch (PROJECT_COMPLEXITY[randProjectComplexity]) {
-               case "MIDDLE":
-                   rowModyficator = 1;
-                   break;
+            int rowModyficator = 0; //podstawowy modyfikator dla projektów łatwych
+            switch (randProjectComplexity)
+            {
+                case GameEnum.ProjectComplexity.Średni:
+                    rowModyficator = 1;
+                    break;
 
-               case "HARD":
-                   rowModyficator = 2;
-                   break;
+                case GameEnum.ProjectComplexity.Trudny:
+                    rowModyficator = 2;
+                    break;
+            }
 
-               default:
-                   rowModyficator = 0;
-           }
+            //generacja czasów poszczególnych technologii procentowo z modyfikatorem
+            for (int i = 0; i < 6; i++)
+            {
+                int randTime = (rand.Next(minDay, maxDay + 1)) + tableOfIntModyficator[rowModyficator, 0];
+                int randTimePercent = (rand.Next(1, 101));
+                if (randTimePercent <= percentagesForTechnologyTime[rowModyficator, i]) randTechTime.Add(randTime);
+                else randTechTime.Add(0);
+            }
+            //ilość dni na projekt od dnia generacji = min czas projektu + modyfikator
+            int dayDeadline = 0;
+            foreach (var time in randTechTime)
+            {
+                dayDeadline += time;
+            }
+            dayDeadline += tableOfIntModyficator[rowModyficator, 1];
+            int forMoney = rand.Next(6, 13);
 
-           //generacja czasów poszczególnych technologii procentowo z modyfikatorem
-           for (int i = 0; i < 6; i++) {
-               int randTime = (ThreadLocalRandom.current().nextInt(minDay, maxDay + 1)) + tableOfIntModyficator[rowModyficator][0];
-               int randTimePercent = (ThreadLocalRandom.current().nextInt(1, 101));
-               if (randTimePercent <= percentagesForTechnologyTime[rowModyficator][i]) randTechTime.add(randTime);
-               else randTechTime.add(0);
-           }
-           //ilość dni na projekt od dnia generacji = min czas projektu + modyfikator
-           int dayDeadline = 0;
-           for (Integer time : randTechTime) dayDeadline += time;
-           dayDeadline += tableOfIntModyficator[rowModyficator][1];
-           int forMoney = ThreadLocalRandom.current().nextInt(6, 13);
+            int[] randTechDuration = new int[randTechTime.Count];
+            for (int i = 0; i < randTechTime.Count; i++)
+            {
+                int time = randTechTime[i];
+                randTechDuration[i] = time;
+            }
 
-           Integer[] randTechDuration = new Integer[randTechTime.size()];
-           for (int i = 0; i < randTechTime.size(); i++) {
-               Integer time = randTechTime.get(i);
-               randTechDuration[i] = time;
-           }
+            return new GameProject(PROJECT_FIRST_SEGMENT_NAME[randFirstSegmentName] + PROJECT_LAST_SEGMENT_NAME[randLastSegmentName],
+                    randProjectComplexity,
+                    now.AddDays(dayDeadline),
+                    (tableOfDoubleModyficator[rowModyficator, 0] * forMoney),
+                    (tableOfDoubleModyficator[rowModyficator, 1] * forMoney),
+                    (rand.Next(minDay, maxDay + 1)) + tableOfIntModyficator[rowModyficator, 0],
+                    randTechDuration
+            );
+        }
 
-           return new GameProject(PROJECT_FIRST_SEGMENT_NAME[randFirstSegmentName] + PROJECT_LAST_SEGMENT_NAME[randLastSegmentName],
-                   ProjectComplexity.valueOf(PROJECT_COMPLEXITY[randProjectComplexity]),
-                   now.plusDays(dayDeadline),
-                   (tableOfDoubleModyficator[rowModyficator][0] * forMoney),
-                   (tableOfDoubleModyficator[rowModyficator][1] * forMoney),
-                   (ThreadLocalRandom.current().nextInt(minDay, maxDay + 1)) + tableOfIntModyficator[rowModyficator][0],
-                   randTechDuration
-           );
-       }
-        */
-
-        public static Client getRandomClient()
+        public static Client GetRandomClient()
         {
             int randCharacter = rand.Next(0, CLIENT_CHARACTER.Length);
             int randName = rand.Next(0, NAMES.Length);
@@ -108,29 +113,29 @@ namespace GDTycon.Game.NPC
             return new Client(NAMES[randName], SURNAMES[randSurname], (GameEnum.ClientCharacter)randCharacter);
         }
 
-        /*
-       public static Employee getRandomEmployee(Occupation occupation) {
-           int randName = ThreadLocalRandom.current().nextInt(0, NAMES.length);
-           int randSurname = ThreadLocalRandom.current().nextInt(0, WORKER_SURNAMES.length);
-           double cost;
+        public static Employee GetRandomEmployee(GameEnum.Occupation occupation)
+        {
+            int randName = rand.Next(0, NAMES.Length);
+            int randSurname = rand.Next(0, WORKER_SURNAMES.Length);
+            double cost;
 
-           switch (occupation) {
-               case DEALER:
-                   cost = DEALER_MAIN_COST;
-                   return new Dealer(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
+            switch (occupation)
+            {
+                case GameEnum.Occupation.Sprzedawca:
+                    cost = DEALER_MAIN_COST;
+                    return new Dealer(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
 
-               case TESTER:
-                   cost = TESTER_MAIN_COST;
-                   return new Tester(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
+                case GameEnum.Occupation.Tester:
+                    cost = TESTER_MAIN_COST;
+                    return new Tester(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
 
-               default:
-                   cost = PROGRAMMER_MAIN_COST; //w późniejszej fazie koszty programistów zostaną zmienione (brakuje tu jeszcze parametrów losowych technologii które programisci umieją(będą to 3 losowe technologie))
-                   return new Programmer(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
-           }
-       }
-        */
+                default:
+                    cost = PROGRAMMER_MAIN_COST; //w późniejszej fazie koszty programistów zostaną zmienione (brakuje tu jeszcze parametrów losowych technologii które programisci umieją(będą to 3 losowe technologie))
+                    return new Programmer(NAMES[randName], WORKER_SURNAMES[randSurname], cost, cost / 4, cost / 2);
+            }
+        }
 
-        //szansa w procentach że coś się uda
+        //szansa w procentach że coś się uda która po wylosowaniu zwraca true lub false
         public static bool CheckPercentegesChance(int chance)
         {
             int randPercent = (rand.Next(1, 101));

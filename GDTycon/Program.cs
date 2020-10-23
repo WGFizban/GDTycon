@@ -1,13 +1,12 @@
-﻿using System;
+﻿using GDTycon.Game.NPC;
+using System;
 using System.Collections.Generic;
-using GDTycon.Game.Engine;
-using GDTycon.Game.NPC;
 
 namespace GDTycon
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
             //GameCore myGame = new GameCore();
@@ -19,8 +18,8 @@ namespace GDTycon
 */
             DateTime startDate = DateTime.Parse("2020, 1, 1");
             Console.WriteLine(startDate + "Czas obecny \n i czas po 20 dniach ");
-            startDate=startDate.AddDays(20);
-            
+            startDate = startDate.AddDays(20);
+
             Console.WriteLine(startDate.ToString("D"));
 
             Dictionary<string, string> test = new Dictionary<string, string>();
@@ -29,7 +28,7 @@ namespace GDTycon
             Console.WriteLine("słownik przed zmianą \n");
             foreach (var item in test)
             {
-                Console.WriteLine("klucz {0} i wartość {1}",item.Key,item.Value);
+                Console.WriteLine("klucz {0} i wartość {1}", item.Key, item.Value);
             }
             Console.WriteLine("i po zmianie \n");
             // zmiana elementu w słowniku test["coś1"] = "nowy coś";
@@ -40,19 +39,13 @@ namespace GDTycon
             }
 
             Generator.NumberGenerator();
-            
 
             for (int i = 0; i < 20; i++)
             {
-            Console.WriteLine(Generator.getRandomClient() + "\n");
+                Console.WriteLine(Generator.getRandomClient() + "\n");
             }
-            
-
-
-
 
             Console.ReadKey();
-
         }
     }
 }

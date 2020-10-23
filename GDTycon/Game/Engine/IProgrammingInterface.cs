@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace GDTycon.Game.Engine
+﻿namespace GDTycon.Game.Engine
 {
-    interface IProgrammingInterface
+    internal interface IProgrammingInterface
     {
+        void ProgrammingDay(GameProject selectedProject);
     }
 }

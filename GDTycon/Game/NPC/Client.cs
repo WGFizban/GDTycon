@@ -25,7 +25,7 @@ namespace GDTycon.Game.NPC
 
         public override string ToString()
         {
-            return "Klient "+ firstName +" " + lastName /*+ " o charakterze " + character*/;
+            return "Klient " + firstName + " " + lastName /*+ " o charakterze " + character*/;
         }
     }
 }

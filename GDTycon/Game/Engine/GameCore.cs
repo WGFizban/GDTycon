@@ -20,6 +20,7 @@ namespace GDTycon.Game.Engine
 
         //Przygotowanie menu pojawiających się w grze
         private Menu dayMenu = new Menu("Programuj", "Zobacz dostępne projekty", "Zobacz moje projekty", "Szukaj klientów/projektów", "Testuj kody", "Oddaj projekt", "Zarządzaj pracownikami", "Rozlicz urzędy", "Wyjdź z programu");
+
         private Menu testMenu = new Menu("Testuj swój kod", "Testuj kod pracowników", "testuj kod współpracowników", "Wróć do menu");
         private Menu hireMenu = new Menu("Zatrudnij pracownika", "Zwolnij pracownika", "Zainwestuj w reklamy by szukać pracowników (300.00)", "Wróć do menu");
         private Menu projMenu = new Menu("Wybierz projekt", "Wróć do menu");

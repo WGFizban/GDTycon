@@ -9,7 +9,7 @@ namespace GDTycon.Game.Engine
         public string projectName;
 
         public GameEnum.ProjectComplexity complexity;
-        
+
         //słowniik z c# zamiast mapy z Java
         // zmiana elementu w słowniku -> słownik["klucz"] = "nowa wartość";
         public Dictionary<string, int> daysForTechnology = new Dictionary<string, int>();
