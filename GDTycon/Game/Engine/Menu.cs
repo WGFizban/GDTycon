@@ -37,7 +37,7 @@ namespace GDTycon.Game.Engine
         //możliwość tworzenia szybkiego menu
         public int SelectOptions(int optionsLimit, string message)
         {
-            Console.WriteLine("\n" + message + " ");
+            Console.Write("\n" + message + " ");
 
             int choice = CheckChoose();
             while (choice >= optionsLimit || choice < 0)

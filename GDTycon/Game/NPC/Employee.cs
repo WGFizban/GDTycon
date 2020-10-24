@@ -21,32 +21,37 @@ namespace GDTycon.Game.NPC
             this.costOfDismissal = costOfDismissal;
         }
 
-        /*
-            public void Hire(Player player) {
-                if (player.getCash() < employmentCost) System.out.println("\nMasz za mało pieniędzy by zatrudnić tą osobe!");
-                else {
-                    System.out.println(this.mainOccupation + " " + this.name + " " + this.surname + " został pomyślnie zatrudniony.");
-                    player.myEmployee.add(this);
-                    player.setCash(player.getCash() - employmentCost);
-                }
+        public void Hire(Player player)
+        {
+            if (player.getCash() < employmentCost) Console.WriteLine("\nMasz za mało pieniędzy by zatrudnić tą osobe!");
+            else
+            {
+                Console.WriteLine(this.mainOccupation + " " + this.name + " " + this.surname + " został pomyślnie zatrudniony.");
+                player.myEmployee.Add(this);
+                player.setCash(player.getCash() - employmentCost);
             }
+        }
 
-            public void Dismiss(Player player) {
-                System.out.println("Zwolniłeś pracownika " + this.name + " " + this.surname + " pracującego jako " + this.mainOccupation);
-                player.myEmployee.remove(this);
-                player.setCash(player.getCash() - costOfDismissal);
-            }
+        public void Dismiss(Player player)
+        {
+            Console.WriteLine("Zwolniłeś pracownika " + this.name + " " + this.surname + " pracującego jako " + this.mainOccupation);
+            player.myEmployee.Remove(this);
+            player.setCash(player.getCash() - costOfDismissal);
+        }
 
-            public void GetSalaryFromPlayer(Player player) {
-                if (player.getCash() < salary) {
-                    System.out.println("Nie masz wystarczającej ilości gotówki by zapłacić pracownikowi " + this.name + " " + this.surname + " Twój " + this.mainOccupation + " odchodzi z Twojej firmy :( ");
-                    player.myEmployee.remove(this);
-                } else {
-                    System.out.println("Wypłacono pensje miesięczna dla pracownika " + this.mainOccupation + " " + this.name + " " + this.surname);
-                    player.setCash(player.getCash() - salary);
-                }
+        public void GetSalaryFromPlayer(Player player)
+        {
+            if (player.getCash() < salary)
+            {
+                Console.WriteLine("Nie masz wystarczającej ilości gotówki by zapłacić pracownikowi " + this.name + " " + this.surname + " Twój " + this.mainOccupation + " odchodzi z Twojej firmy :( ");
+                player.myEmployee.Remove(this);
             }
-        */
+            else
+            {
+                Console.WriteLine("Wypłacono pensje miesięczna dla pracownika " + this.mainOccupation + " " + this.name + " " + this.surname);
+                player.setCash(player.getCash() - salary);
+            }
+        }
 
         abstract public bool DoYourWorkForPlayer(Player player);
 
