@@ -1,14 +1,13 @@
 ﻿using GDTycon.Game.NPC;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace GDTycon.Game.Engine
 {
     public class GameCore
     {
         // data rozpoczęcia gry i ilość dostępnych zasobów
-        private static DateTime startDate = DateTime.Parse("2020, 1, 29");
+        private static readonly DateTime startDate = DateTime.Parse("2020, 1, 20");
 
         private const int startAvailableProject = 3;
         private const int startAvailableTesters = 1;
@@ -16,24 +15,24 @@ namespace GDTycon.Game.Engine
         private const int startAvailableProgrammers = 2;
 
         //Pamięć dnia, aktualnego gracza, i stanu dla gry
-        private DateTime currentDay;
+        public DateTime currentDay;
 
         private Player playerOnTurn;
         private bool gameIsOn;
 
         //listy potrzebne na bierząco
-        private List<Player> players = new List<Player>();
+        private readonly List<Player> players = new List<Player>();
 
-        private List<GameProject> availableProject = new List<GameProject>();
-        private List<Employee> availableEmployee = new List<Employee>(); //lista do przechowywania dostępnych pracowników
-        private List<Client> allClient = new List<Client>();
+        private readonly List<GameProject> availableProject = new List<GameProject>();
+        private readonly List<Employee> availableEmployee = new List<Employee>(); //lista do przechowywania dostępnych pracowników
+        private readonly List<Client> allClient = new List<Client>();
 
         //Przygotowanie menu pojawiających się w grze
-        private Menu dayMenu = new Menu("Programuj", "Zobacz dostępne projekty", "Zobacz moje projekty", "Szukaj klientów/projektów", "Testuj kody", "Oddaj projekt", "Zarządzaj pracownikami", "Rozlicz urzędy", "Wyjdź z programu");
+        private readonly Menu dayMenu = new Menu("Programuj", "Zobacz dostępne projekty", "Zobacz moje projekty", "Szukaj klientów/projektów", "Testuj kody", "Oddaj projekt", "Zarządzaj pracownikami", "Rozlicz urzędy", "Wyjdź z programu");
 
-        private Menu testMenu = new Menu("Testuj swój kod", "Testuj kod pracowników", "testuj kod współpracowników", "Wróć do menu");
-        private Menu hireMenu = new Menu("Zatrudnij pracownika", "Zwolnij pracownika", "Zainwestuj w reklamy by szukać pracowników (300.00)", "Wróć do menu");
-        private Menu projMenu = new Menu("Wybierz projekt", "Wróć do menu");
+        private readonly Menu testMenu = new Menu("Testuj swój kod", "Testuj kod pracowników", "testuj kod współpracowników", "Wróć do menu");
+        private readonly Menu hireMenu = new Menu("Zatrudnij pracownika", "Zwolnij pracownika", "Zainwestuj w reklamy by szukać pracowników (300.00)", "Wróć do menu");
+        private readonly Menu projMenu = new Menu("Wybierz projekt", "Wróć do menu");
 
         public GameCore()
         {
@@ -43,7 +42,7 @@ namespace GDTycon.Game.Engine
         public void StartNewGame()
         {
             //ekran powitalny
-            Console.WriteLine("Witaj w Game dev Tycon symulatorze firmy IT. Przygoda rozpoczyna się 1 stycznia 2020r\nPodejmuj mądre decyzje i nie zbankrutuj. Powodzenia!\n");
+            Console.WriteLine($"Witaj w Game dev Tycon symulatorze firmy IT. Przygoda rozpocznie się w {startDate:D}\nPodejmuj mądre decyzje i nie zbankrutuj. Powodzenia!\n");
 
             //wprowadzenie graczy
             int isMorePlayer;
@@ -74,10 +73,14 @@ namespace GDTycon.Game.Engine
 
         private void SetStartProporties()
         {
-            //przygotowanie puli początkowych projektów dostępnych dla gracza i tyle samo klientów
+            //przygotowanie puli początkowych projektów dostępnych dla gracza
             for (int i = 0; i < startAvailableProject; i++)
             {
                 availableProject.Add(Generator.GetRandomGameProject(startDate));
+            }
+            // przygotowanie puli klientów jako 2x ilość początkowych projektów
+            for (int i = 0; i < startAvailableProject * 2; i++)
+            {
                 allClient.Add(Generator.GetRandomClient());
             }
             //lososwe przypisanie klientów do wygenerowanych projektów
@@ -116,14 +119,17 @@ namespace GDTycon.Game.Engine
             //kod wypłacania pensji pracowniczych
             //CheckIsTimeForReward(currentDay);
 
-            //kod by prcowali pracownicy
+            //kod by pracowali pracownicy
             //EmployeeToWork(player);
 
-            Console.WriteLine("Twój stan konta: " + player.getCash());
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Twój stan konta: " + player.GetCash());
+            Console.ResetColor();
 
             MainAction(dayMenu.SelectOptions());
         }
 
+        // przygotowywanie konsoli - czyszczenie i info o graczu i dacie
         private void PrepareConsole(Player player)
         {
             Console.Clear();
@@ -131,6 +137,7 @@ namespace GDTycon.Game.Engine
             Console.WriteLine($"          Jest  {currentDay:D} \n");
         }
 
+        // Główny switch sterujący - Menu główne
         private void MainAction(int action)
         {
             PrepareConsole(playerOnTurn);
@@ -146,11 +153,11 @@ namespace GDTycon.Game.Engine
                     break;
 
                 case 2:
-                    //ShowPlayerProject();
+                    ShowPlayerProject();
                     break;
 
                 case 3:
-                    //SearchNewProject(playerOnTurn);
+                    SearchNewProject(playerOnTurn);
                     break;
 
                 case 4:
@@ -166,7 +173,7 @@ namespace GDTycon.Game.Engine
                     break;
 
                 case 7:
-                    //PayOfficialFees();
+                    PayOfficialFees();
                     break;
 
                 default:
@@ -193,6 +200,7 @@ namespace GDTycon.Game.Engine
             CheckCash();
         }
 
+        //sprawdzenie czy gracz zapłacił Zus i wypłacenie pensji pracownikom
         private void CheckZusAndPaySalary(int nextMonth)
         {
             // ostatni termin = długosc miesiąca obecnego - dzien miesiaca w obecnej dacie
@@ -212,7 +220,7 @@ namespace GDTycon.Game.Engine
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\nW tym miesiącu zapomniałeś dwukrotnie rozliczyś się z urzędami. Wpada kontrola i zamykasz firmę z długami.");
-                playerOnTurn.setCash(0.0);
+                playerOnTurn.SetCash(0.0);
             }
             else if ((!(nextMonth == currentDay.Month)) && playerOnTurn.countFeePerMonth == 2)
             {
@@ -234,18 +242,19 @@ namespace GDTycon.Game.Engine
         // warunek przegrana/wygrania gry
         public void CheckCash()
         {
-            if (playerOnTurn.getCash() <= 0)
+            if (playerOnTurn.GetCash() <= 0)
             {
                 gameIsOn = false;
                 Console.WriteLine("Gracz " + playerOnTurn.nickName + " właśnie zbankrutował. Koniec Gry!!!");
             }
-            else if (playerOnTurn.getCash() >= (10 * Player.defaultStartingCash))
+            else if (playerOnTurn.GetCash() >= (10 * Player.defaultStartingCash))
             {
                 gameIsOn = false;
                 Console.WriteLine("Gracz " + playerOnTurn + " zarobił 10x więcej pieniędzy niż miał na początku gry. WYGRYWA!!! GRATULUJĘ!");
             }
         }
 
+        // wybieranie projektu z dostępnych projektów
         private void ChooseFromAvailableProject()
         {
             if (availableProject.Count == 0)
@@ -298,9 +307,64 @@ namespace GDTycon.Game.Engine
             return !project.complexity.Equals(GameEnum.ProjectComplexity.Trudny) || player.myEmployee.Count != 0;
         }
 
+        // wyswietlanie projektów gracza - podjętych przez niego
+        private void ShowPlayerProject()
+        {
+            playerOnTurn.CheckAndShowProject(currentDay);
+            Console.ReadKey();
+            PrepareConsole(playerOnTurn);
+            MainAction(dayMenu.SelectOptions());
+        }
+
+        // dokonanie niezbędnych płatnosci zusu
+        private void PayOfficialFees()
+        {
+            if (playerOnTurn.countFeePerMonth == 2)
+            {
+                Console.WriteLine("W tym miesiącu opłaciłeś już urzędy wymaganą ilość razy. ZUS jest Ci wdzięczny.\nKliknij dowolny przycisk by wrócić do Menu");
+                Console.ReadKey();
+                PrepareConsole(playerOnTurn);
+                MainAction(dayMenu.SelectOptions());
+            }
+            else
+            {
+                //opłata urzędów jako 5 % dwa razy w msc
+                playerOnTurn.SetCash(playerOnTurn.GetCash() - (playerOnTurn.GetCash() * 0.05));
+                CheckCash();
+                playerOnTurn.countFeePerMonth++;
+                Console.WriteLine("Dzień papierkowej roboty. Dokonujesz opłat " + playerOnTurn.countFeePerMonth + " raz w tym miesiącu. Pobraliśmy wymagane opłaty.\nKliknij dowolny przycisk by wrócić do Menu");
+                Console.ReadKey();
+                EndDay(playerOnTurn);
+            }
+        }
+
+        //kod załączający wyszukiwanie nowych projektów
+        private void SearchNewProject(Player player)
+        {
+            if (!player.SearchProject())
+            {
+                Console.WriteLine("Dzisiaj cały dzień poszukujesz nowych zleceń w internecie. Do znalezienia projektu potrzeba jeszcze " + (5 - player.GetDayForLookingClient()) + " wywołania.");
+            }
+            else
+            {
+                Console.WriteLine("\nZnalezłeś nowy projekt. Sprawdź go jutro w dostępnych zleceniach!");
+                AddNewAvailableProjeckt();
+            }
+            Console.ReadKey();
+            EndDay(playerOnTurn);
+        }
+
+        private void AddNewAvailableProjeckt()
+        {
+            GameProject anotherOne = Generator.GetRandomGameProject(currentDay);
+            allClient.Add(Generator.GetRandomClient());
+            Generator.RandomAddProjectToClient(anotherOne, allClient);
+            availableProject.Add(anotherOne);
+        }
+
         /*
 
-private void employeeToWork(Player player) {
+private void EmployeeToWork(Player player) {
     if (!(currentDay.getDayOfWeek().toString().equals("SUNDAY")) && player.myEmployee.size() > 0) {
         System.out.println("Twoi pracownicy pracują");
         for (Employee employee : player.myEmployee) {
@@ -472,6 +536,7 @@ private void testProject() throws InterruptedException {
 
         default:
             mainAction(dayMenu.selectOptions());
+        break;
     }
 }
 
@@ -492,35 +557,6 @@ private void testPlayerProject(Player player) throws InterruptedException {
             endDay(playerOnTurn);
         }
     }
-}
-
-private void searchNewProject(Player player) {
-    if (!player.searchProject()) {
-        System.out.println("Dzisiaj cały dzień poszukujesz nowych zleceń w internecie. Do znalezienia projektu potrzeba jeszcze " + (5 - player.getDayForLookingClient()) + " wywołania.");
-    } else {
-        System.out.println("\nZnalezłeś nowy projekt. Sprawdź go jutro w dostępnych zleceniach!");
-        addNewAvailableProjeckt();
-    }
-    endDay(playerOnTurn);
-}
-
-private void payOfficialFees() throws InterruptedException {
-    if (playerOnTurn.countFeePerMonth == 2) {
-        System.out.println("W tym miesiącu opłaciłeś już urzędy wymaganą ilość razy. ZUS jest Ci wdzięczny.\nWybierz inną opcję.");
-        mainAction(dayMenu.selectOptions());
-    } else {
-        //opłata urzędów jako 5 % dwa razy w msc
-        playerOnTurn.setCash(playerOnTurn.getCash() - (playerOnTurn.getCash() * 0.05));
-        checkCash();
-        playerOnTurn.countFeePerMonth++;
-        System.out.println("Dzień papierkowej roboty. Dokonujesz opłat " + playerOnTurn.countFeePerMonth + " raz w tym miesiącu. Pobraliśmy wymagane opłaty.");
-        endDay(playerOnTurn);
-    }
-}
-
-private void showPlayerProject() throws InterruptedException {
-    playerOnTurn.checkAndShowProject();
-    mainAction(dayMenu.selectOptions());
 }
 
 private void goProgrammingPlayer() throws InterruptedException {
@@ -546,17 +582,6 @@ private void goProgrammingPlayer() throws InterruptedException {
         System.out.println("Nie masz projektów nad którymi możesz pracować. Zacznij pracę nad nowym projektem.");
         mainAction(dayMenu.selectOptions());
     }
-}
-
-private void addNewAvailableProjeckt() {
-    GameProject anotherOne = Generator.getRandomGameProject(currentDay);
-    Generator.getRandomClient().addProject(anotherOne);
-    addProjectToAvailable(anotherOne);
-}
-
-//przygotowanie do dodawania projektów
-private void addProjectToAvailable(GameProject proj) {
-    availableProject.add(proj);
 }
 
 private void checkIsTimeForReward(LocalDate currentDay) {

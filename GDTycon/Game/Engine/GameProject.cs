@@ -58,12 +58,29 @@ namespace GDTycon.Game.Engine
             }
         }
 
+        private string TranslateReady()
+        {
+            return (ready) ? "Gotowy" : "Nie gotowy";
+        }
+
+        private string DecodeDayForTechnology()
+        {
+            string afterDecoding = "";
+            foreach (var dfr in daysForTechnology)
+            {
+                afterDecoding += $"        {dfr.Key}: {dfr.Value}\n";
+            }
+            return afterDecoding;
+        }
+
         public override string ToString()
         {
-            return "Projekt " + projectName + " o złożoności  " + complexity + ". Właściciel " + owner.firstName + " " + owner.lastName + "\n" +
-                    "Termin wykonania: " + deadLine.ToString("D") + " " + " Stan gotowości: " + ready + "\n" +
-                    "Technologie i czas " + daysForTechnology + "\n" +
-                    "Spodziewana nagroda " + reward + " po " + timeOfReward + " dniach roboczych od ukończenia. Kara: " + penalty + "\n";
+            return $"Projekt {projectName} o złożonośći {complexity}. Właściciel { owner.firstName} { owner.lastName} \n" + $"Termin Wykonania: {deadLine:D}. Stan gotowości: { TranslateReady()} \n" + $"Technologie i czas:\n{DecodeDayForTechnology()}" + $"Spodziewana nagroda {reward} po {timeOfReward} dniach roboczych od ukończenia. Kara: {penalty} \n" + $"";
+        }
+
+        public string ToString(DateTime currentDate)
+        {
+            return $"Projekt {projectName} o złożonośći {complexity}. Właściciel { owner.firstName} { owner.lastName} \n" + $"Termin Wykonania: {deadLine:D} (pozostało {deadLine.DayOfYear - currentDate.DayOfYear} dni). Stan gotowości: { TranslateReady()} \n" + $"Technologie i czas:\n{DecodeDayForTechnology()}" + $"Spodziewana nagroda {reward} po {timeOfReward} dniach roboczych od ukończenia. Kara: {penalty} \n" + $"";
         }
     }
 }

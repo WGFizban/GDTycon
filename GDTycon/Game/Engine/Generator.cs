@@ -29,9 +29,6 @@ namespace GDTycon.Game.NPC
         //przygotowanie klasy randomowej c# do pracy
         private static readonly Random rand = new Random();
 
-        private static int min;
-        private static int max;
-
         public static void NumberGenerator()
         {
             Console.WriteLine("100 random integers between 0 and 100:");
@@ -47,8 +44,7 @@ namespace GDTycon.Game.NPC
             int randLastSegmentName = rand.Next(0, PROJECT_LAST_SEGMENT_NAME.Length);
             //int randProjectComplexity = rand.Next(0, PROJECT_COMPLEXITY.Length);
 
-            GameEnum.ProjectComplexity randProjectComplexity = new GameEnum.ProjectComplexity();
-            randProjectComplexity = (GameEnum.ProjectComplexity)rand.Next(0, PROJECT_COMPLEXITY.Length);
+            GameEnum.ProjectComplexity randProjectComplexity = (GameEnum.ProjectComplexity)rand.Next(0, PROJECT_COMPLEXITY.Length);
 
             int minDay = 1, maxDay = 2;
             List<int> randTechTime = new List<int>();
@@ -149,6 +145,12 @@ namespace GDTycon.Game.NPC
                 int ranIndexClient = rand.Next(0, clients.Count);
                 clients[ranIndexClient].AddProject(project);
             }
+        }
+
+        public static void RandomAddProjectToClient(GameProject project, List<Client> clients)
+        {
+            int ranIndexClient = rand.Next(0, clients.Count);
+            clients[ranIndexClient].AddProject(project);
         }
     }
 }

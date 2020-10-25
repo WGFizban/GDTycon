@@ -1,7 +1,6 @@
 ﻿using GDTycon.Game.NPC;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GDTycon.Game.Engine
 {
@@ -37,35 +36,32 @@ namespace GDTycon.Game.Engine
         //sprawdzić czy da się zamienić poniższe funkcje z java na właściwość
         //public double Cash { get => Math.Round(cash,2); set => cash = value; }
 
-        public double getCash()
+        public double GetCash()
         {
             //dodanie zaokrąglania do pola cash - pomocne przy pracy z procentami
 
             return Math.Round(cash, 2);
         }
 
-        public void setCash(double cash)
+        public void SetCash(double cash)
         {
             this.cash = cash;
         }
 
-        public void CheckAndShowProject()
+        public void CheckAndShowProject(DateTime curDay)
         {
             if (myProjects.Count == 0) Console.WriteLine("Aktualnie nie masz żadnych projektów \n");
-            else ShowMyProjects();
+            else ShowMyProjects(curDay);
         }
 
-        public void ShowMyProjects()
+        public void ShowMyProjects(DateTime curDay)
         {
             Console.Clear();
+            Console.WriteLine("Twoje projekty: \n");
             for (int i = 0; i < myProjects.Count; i++)
             {
                 GameProject project = myProjects[i];
-                Console.WriteLine(i + " Projekt '" + project.projectName + "' o złożoności  " + project.complexity + ". Właściciel " + project.owner.firstName + " " + project.owner.lastName + "\n" +
-                        "Termin wykonania: " + project.deadLine.ToString("D") + " " + " Stan gotowości: " + project.ready + "\n" +
-                        "Technologie i czas " + project.daysForTechnology + "\n" +
-                        "Spodziewana nagroda " + project.reward + " po " + project.timeOfReward + " dniach roboczych od ukończenia. Kara: " + project.penalty + "\n" +
-                        "Błędy w kodzie: " + project.coderError + "\n");
+                Console.WriteLine($"{i} {project.ToString(curDay)}");
             }
         }
 

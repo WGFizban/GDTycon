@@ -5,11 +5,11 @@ namespace GDTycon.Game.NPC
 {
     internal abstract class Employee
     {
-        private String name;
-        private string surname;
-        private double salary;
-        private double employmentCost;
-        private double costOfDismissal;
+        private readonly String name;
+        private readonly string surname;
+        private readonly double salary;
+        private readonly double employmentCost;
+        private readonly double costOfDismissal;
         public GameEnum.Occupation mainOccupation;
 
         public Employee(string name, string surname, double salary, double employmentCost, double costOfDismissal)
@@ -23,12 +23,12 @@ namespace GDTycon.Game.NPC
 
         public void Hire(Player player)
         {
-            if (player.getCash() < employmentCost) Console.WriteLine("\nMasz za mało pieniędzy by zatrudnić tą osobe!");
+            if (player.GetCash() < employmentCost) Console.WriteLine("\nMasz za mało pieniędzy by zatrudnić tą osobe!");
             else
             {
                 Console.WriteLine(this.mainOccupation + " " + this.name + " " + this.surname + " został pomyślnie zatrudniony.");
                 player.myEmployee.Add(this);
-                player.setCash(player.getCash() - employmentCost);
+                player.SetCash(player.GetCash() - employmentCost);
             }
         }
 
@@ -36,12 +36,12 @@ namespace GDTycon.Game.NPC
         {
             Console.WriteLine("Zwolniłeś pracownika " + this.name + " " + this.surname + " pracującego jako " + this.mainOccupation);
             player.myEmployee.Remove(this);
-            player.setCash(player.getCash() - costOfDismissal);
+            player.SetCash(player.GetCash() - costOfDismissal);
         }
 
         public void GetSalaryFromPlayer(Player player)
         {
-            if (player.getCash() < salary)
+            if (player.GetCash() < salary)
             {
                 Console.WriteLine("Nie masz wystarczającej ilości gotówki by zapłacić pracownikowi " + this.name + " " + this.surname + " Twój " + this.mainOccupation + " odchodzi z Twojej firmy :( ");
                 player.myEmployee.Remove(this);
@@ -49,7 +49,7 @@ namespace GDTycon.Game.NPC
             else
             {
                 Console.WriteLine("Wypłacono pensje miesięczna dla pracownika " + this.mainOccupation + " " + this.name + " " + this.surname);
-                player.setCash(player.getCash() - salary);
+                player.SetCash(player.GetCash() - salary);
             }
         }
 
